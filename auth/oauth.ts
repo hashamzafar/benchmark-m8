@@ -1,9 +1,9 @@
 import passport from "passport"
 import { Strategy as FacebookStrategy } from "passport-facebook"
-import UserModel from "../services/users/schema"
+import UserModel from "../services/user/schema"
 import { JWTAuthenticate } from "./tools"
 import { Strategy as GoogleStrategy} from "passport-google-oauth20"
-import { DbUser } from "../services/users/schemaInterface"
+import { DbUser } from "../services/user/schemaInterface"
 
 export const facebookStrategy = new FacebookStrategy(
   {

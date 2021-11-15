@@ -2,15 +2,15 @@ import { Router, Request, Response, NextFunction } from "express"
 import createError from "http-errors"
 import { JWTAuthMiddleware } from "../../auth/middlewares"
 import UserModel from "./schema"
-import AccomodationsModel from "../accomodations/schema"
-import { hostOnly } from "./sharedMiddlewares"
+import AccomodationsModel from "../accommodation/schema"
+import { hostOnly } from "./sharedMiddleware"
 import { DbUser, User } from "./schemaInterface"
 
 const usersRouter = Router()
 
 /***************GET ALL USERS*******************/
 
-usersRouter.get("/", JWTAuthMiddleware, hostOnly, async (req, res, next) => {
+usersRouter.get("/", JWTAuthMiddleware, hostOnly, async (req:Request, res:Response, next :NextFunction) => {
   try {
     const users = await UserModel.find()
     res.send(users)
@@ -22,7 +22,7 @@ usersRouter.get("/", JWTAuthMiddleware, hostOnly, async (req, res, next) => {
 
 /***************GET ONLY YOUR USER DETAILS*******************/
 
-usersRouter.get("/me", JWTAuthMiddleware, async (req, res, next) => {
+usersRouter.get("/me", JWTAuthMiddleware, async (req:Request, res:Response, next :NextFunction) => {
   try {
     res.send(req.user)
   } catch (error) {
@@ -33,7 +33,7 @@ usersRouter.get("/me", JWTAuthMiddleware, async (req, res, next) => {
 
 /***************GET USER DEATILS BY SPECIFIC ID*******************/
 
-usersRouter.get("/:userId", JWTAuthMiddleware, hostOnly, async (req, res, next) => {
+usersRouter.get("/:userId", JWTAuthMiddleware, hostOnly, async (req:Request, res:Response, next :NextFunction) => {
   try {
     const userId = req.params.userId
     const user = await UserModel.findById(userId)
@@ -50,7 +50,7 @@ usersRouter.get("/:userId", JWTAuthMiddleware, hostOnly, async (req, res, next) 
 
 /***************EDIT ONLY YOUR USER DEATILS*******************/
 
-usersRouter.put("/me", JWTAuthMiddleware, async (req, res, next) => {
+usersRouter.put("/me", JWTAuthMiddleware, async (req:Request, res:Response, next :NextFunction) => {
   try {
     const body = req.user as DbUser
     body.name = req.body.name ? req.body.name : body.name
@@ -68,7 +68,7 @@ usersRouter.put("/me", JWTAuthMiddleware, async (req, res, next) => {
 
 /***************EDIT USER DEATILS BY ID*******************/
 
-usersRouter.put("/:userId", JWTAuthMiddleware, hostOnly, async (req, res, next) => {
+usersRouter.put("/:userId", JWTAuthMiddleware, hostOnly, async (req:Request, res:Response, next :NextFunction) => {
   try {
     const userId = req.params.userId
     const editUser = await UserModel.findByIdAndUpdate(userId, req.body, {
@@ -100,7 +100,7 @@ usersRouter.delete("/me", JWTAuthMiddleware, async (req:Request, res: Response, 
 
 /***************DELETE USER DETAILS BY ID*******************/
 
-usersRouter.delete("/:userId", JWTAuthMiddleware, hostOnly, async (req, res, next) => {
+usersRouter.delete("/:userId", JWTAuthMiddleware, hostOnly, async (req:Request, res:Response, next :NextFunction) => {
   try {
     const userId = req.params.userId
     const user = await UserModel.findByIdAndDelete(userId)
@@ -118,7 +118,7 @@ usersRouter.get(
   "/me/accomodation",
   JWTAuthMiddleware,
   hostOnly,
-  async (req, res, next) => {
+  async (req:Request, res:Response, next :NextFunction) => {
     try {
       const userId = (req.user as DbUser)._id
       const myAccomodations = await AccomodationsModel.find({ host: userId })

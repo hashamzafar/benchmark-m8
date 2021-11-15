@@ -1,5 +1,5 @@
 import express from "express"
-
+import { Request, Response } from 'express'
 import listEndpoints from "express-list-endpoints"
 import cors from "cors"
 import createError from "http-errors"
@@ -52,7 +52,7 @@ server.use(errors.unAuthorizedHandler)
 
 console.table(listEndpoints(server))
 
-server.use((req, res) => {
+server.use((req:Request, res:Response) => {
   if (!req.route) {
     const error = createError(404, "This route is not found!")
     res.status(error.status).send(error)

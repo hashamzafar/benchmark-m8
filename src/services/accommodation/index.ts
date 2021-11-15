@@ -1,4 +1,4 @@
-import { Router } from "express"
+import { Router, Request, Response, NextFunction } from "express"
 import createError from "http-errors"
 import { JWTAuthMiddleware } from "../../auth/middlewares"
 import { hostOnly } from "../user/sharedMiddleware"
@@ -7,7 +7,7 @@ import { DbAccomodation } from "./schemaInterface"
 
 const accomodationsRouter = Router()
 
-accomodationsRouter.get("/", JWTAuthMiddleware, async (req, res, next) => {
+accomodationsRouter.get("/", JWTAuthMiddleware, async (req:Request, res:Response, next :NextFunction) => {
   try {
     const accomodations = await AccomodationModel.find().populate("host")
     res.send(accomodations)
@@ -17,7 +17,7 @@ accomodationsRouter.get("/", JWTAuthMiddleware, async (req, res, next) => {
   }
 })
 
-accomodationsRouter.get("/:id", JWTAuthMiddleware, async (req, res, next) => {
+accomodationsRouter.get("/:id", JWTAuthMiddleware, async (req:Request, res:Response, next :NextFunction) => {
   try {
     const accomodation = await AccomodationModel.findById(req.params.id).populate("host")
 
@@ -31,7 +31,7 @@ accomodationsRouter.get("/:id", JWTAuthMiddleware, async (req, res, next) => {
   }
 })
 
-accomodationsRouter.post("/", JWTAuthMiddleware, hostOnly, async (req, res, next) => {
+accomodationsRouter.post("/", JWTAuthMiddleware, hostOnly, async (req:Request, res:Response, next :NextFunction) => {
   try {
     const newAccomodation = new AccomodationModel({ ...req.body, host: (req.user as DbAccomodation).id })
     const { _id } = await newAccomodation.save()
@@ -41,7 +41,7 @@ accomodationsRouter.post("/", JWTAuthMiddleware, hostOnly, async (req, res, next
   }
 })
 
-accomodationsRouter.put("/:id", JWTAuthMiddleware, hostOnly, async (req, res, next) => {
+accomodationsRouter.put("/:id", JWTAuthMiddleware, hostOnly, async (req:Request, res:Response, next :NextFunction) => {
   try {
     const updatedAccomodation = await AccomodationModel.findByIdAndUpdate(
       req.params.id,
@@ -65,7 +65,7 @@ accomodationsRouter.delete(
   "/:id",
   JWTAuthMiddleware,
   hostOnly,
-  async (req, res, next) => {
+  async (req:Request, res:Response, next :NextFunction) => {
     try {
       const accomodationDeleted = await AccomodationModel.findByIdAndDelete(req.params.id)
       if (accomodationDeleted) {
